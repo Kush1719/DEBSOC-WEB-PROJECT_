@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Generative AI - Quiz</title>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f1f1f1;
+    }
+
+    h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    }
+
+    #quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .question {
+    margin-bottom: 20px;
+    }
+
+    .question p {
+    font-size: 20px;
+    }
+
+    .options label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+    }
+
+    #submit-btn {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    background-color:sandybrown;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    #submit-btn:hover {
+    background-color: black;
+    }
+
+    #timer {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    }
+
+    #result {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    }
+
+
+  </style>
+  <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const quizContainer = document.getElementById('quiz-container');
+      const submitBtn = document.getElementById('submit-btn');
+      const resultContainer = document.getElementById('result');
+      const timer = document.getElementById('timer');
+
+      let score = 0;
+      let totalQuestions = 4;
+      let timeInSeconds = 0;
+      let timerInterval;
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          timeInSeconds++;
+          timer.innerHTML = formatTime(timeInSeconds);
+        }, 1000);
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+      }
+
+      function calculateScore() {
+        score = 0;
+        const form = quizContainer.querySelector('form');
+        const answers = ['ChatGPT', 'Salvador Dalí and Pixar’s WALL-E', 'Midjourney', 'Diffusion model'];
+
+        for (let i = 0; i < totalQuestions; i++) {
+          const radios = form.elements[`question${i}`];
+          for (let j = 0; j < radios.length; j++) {
+            if (radios[j].checked && radios[j].value === answers[i]) {
+              score++;
+              break;
+            }
+          }
+        }
+      }
+
+      function showResult() {
+        clearInterval(timerInterval);
+        calculateScore();
+        resultContainer.innerHTML = `You scored ${score} out of ${totalQuestions} questions.`;
+        resultContainer.style.display = 'block';
+      }
+
+      submitBtn.addEventListener('click', () => {
+        showResult();
+      });
+
+      startTimer();
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Generative AI - Quiz</h1>
+  <div id="quiz-container">
+    <form>
+      <div class="question">
+        <p>1. _______ is a large language model chatbot developed by OpenAI based on GPT-3.5</p>
+        <div class="options">
+          <label><input type="radio" name="question0" value="ChatGPT">ChatGPT</label>
+          <label><input type="radio" name="question0" value="DALL-E">DALL-E</label>
+          <label><input type="radio" name="question0" value="Blenderbot">Blenderbot</label>
+          <label><input type="radio" name="question0" value="Cicero">Cicero</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>2. DALL-E was named after?</p>
+        <div class="options">
+          <label><input type="radio" name="question1" value="Salvador Dalí and Pixar’s WALL-E">Salvador Dalí and
+            Pixar’s WALL-E</label>
+          <label><input type="radio" name="question1" value="ChatGPT">ChatGPT</label>
+          <label><input type="radio" name="question1" value="Blenderbot">Blenderbot</label>
+          <label><input type="radio" name="question1" value="Cicero">Cicero</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>3. _______ created a Discord community with bots that can turn your text into images in less than a
+          minute.</p>
+        <div class="options">
+          <label><input type="radio" name="question2" value="Midjourney">Midjourney</label>
+          <label><input type="radio" name="question2" value="ChatGPT">ChatGPT</label>
+          <label><input type="radio" name="question2" value="Blenderbot">Blenderbot</label>
+          <label><input type="radio" name="question2" value="Cicero">Cicero</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>4. _______ is a method for creating images from text prompts. It works by adding random noise to a set of
+          training images, then learning how to remove noise to construct the desired image.</p>
+        <div class="options">
+          <label><input type="radio" name="question3" value="Diffusion model">Diffusion model</label>
+          <label><input type="radio" name="question3" value="ChatGPT">ChatGPT</label>
+          <label><input type="radio" name="question3" value="Blenderbot">Blenderbot</label>
+          <label><input type="radio" name="question3" value="Cicero">Cicero</label>
+        </div>
+      </div>
+
+      <button id="submit-btn" type="button">Submit</button>
+    </form>
+    <div id="timer">00:00</div>
+    <div id="result" style="display: none;"></div>
+  </div>
+</body>
+
+</html>
